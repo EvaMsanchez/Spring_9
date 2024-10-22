@@ -7,10 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity // entidad = tabla
 @Table(name="persons")
 public class Person 
 {
+    // atributo = columna
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // indicar cual es el tipo de dato
     private Long id;
