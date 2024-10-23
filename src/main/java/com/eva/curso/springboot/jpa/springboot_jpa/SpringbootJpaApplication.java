@@ -1,7 +1,7 @@
 package com.eva.curso.springboot.jpa.springboot_jpa;
 
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -36,7 +36,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		/*
 		Person person = null;
 		Optional<Person> optionalPerson = repository.findById(1L);
-
+		// if(!optionalPerson.Empty())
 		if(optionalPerson.isPresent())
 		{
 			person = optionalPerson.get();
@@ -45,7 +45,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		*/
 
 		// Otra forma de realizarlo más simplificada
-		repository.findById(1L).ifPresent(person -> System.out.println(person));
+		repository.findByNameContaining("rí").ifPresent(person -> System.out.println(person));
 	}
 
 
