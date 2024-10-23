@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eva.curso.springboot.jpa.springboot_jpa.entities.Person;
 import com.eva.curso.springboot.jpa.springboot_jpa.repositories.PersonRepository;
@@ -31,16 +32,20 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	}
 
 
+	// Cuando son métodos crear, modificar, eliminar
+	@Transactional
 	public void create()
 	{
 		Person person = new Person(null, "Lalo", "Thor", "Phyton");
 
-		// Guardamos un nuevo registro
+		// Guardamos un nuevo registro y devuelve el objeto que se guardó
 		Person personNew = repository.save(person);
 		System.out.println(personNew);
 	}
 
 
+	// Cuando es consulta "select", solo lectura
+	@Transactional(readOnly = true)
 	public void findOne()
 	{
 		/*
@@ -59,6 +64,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	}
 
 
+	@Transactional(readOnly = true)
 	public void list()
 	{
 		//List<Person> persons = (List<Person>) repository.findAll();
