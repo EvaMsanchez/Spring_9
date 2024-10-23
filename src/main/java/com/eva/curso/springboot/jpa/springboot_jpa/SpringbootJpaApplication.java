@@ -29,11 +29,47 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		update();	
+		delete2();	
 	}
 
 
-	// MODIFICAR un registro
+	// 
+	@Transactional
+	public void delete2()
+	{
+		repository.findAll().forEach(System.out::println);
+
+		// Simular que nos pasan el id de la persona a eliminar
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el id a eliminar:");
+		Long id = scanner.nextLong();
+
+		repository.deleteById(id);
+		repository.findAll().forEach(System.out::println);
+
+		scanner.close();
+	}
+
+
+	// ELIMINAR registros
+	@Transactional
+	public void delete()
+	{
+		repository.findAll().forEach(System.out::println); // Mostrar la lista antes de borrar
+
+		// Simular que nos pasan el id de la persona a eliminar
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el id a eliminar:");
+		Long id = scanner.nextLong();
+
+		repository.deleteById(id);
+		repository.findAll().forEach(System.out::println); // Mostrar la lista
+
+		scanner.close();
+	}
+
+
+	// ACTUALIZAR registros
 	@Transactional
 	public void update()
 	{
@@ -42,7 +78,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		System.out.println("Ingrese el id de la persona:");
 		Long id = scanner.nextLong();
 
-		// Buscar el objeto persona por el id
+		// Buscar el objeto persona por el id. Con el "Optional" se envuelve el objeto para preguntar si está presente o no
 		Optional<Person> optionalPerson = repository.findById(id);
 		
 		// optionalPerson.ifPresent(person -> {
