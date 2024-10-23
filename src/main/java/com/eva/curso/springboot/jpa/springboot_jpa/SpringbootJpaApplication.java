@@ -1,7 +1,8 @@
 package com.eva.curso.springboot.jpa.springboot_jpa;
 
 import java.util.List;
-//import java.util.Optional;
+import java.util.Optional;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -28,11 +29,49 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		create();	
+		update();	
+	}
+
+
+	// MODIFICAR un registro
+	@Transactional
+	public void update()
+	{
+		// Simular que nos pasan el id de la persona a modificar y los datos que se modifican
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el id de la persona:");
+		Long id = scanner.nextLong();
+
+		// Buscar el objeto persona por el id
+		Optional<Person> optionalPerson = repository.findById(id);
+		
+		// optionalPerson.ifPresent(person -> {
+		if(optionalPerson.isPresent())
+		{
+			Person person = optionalPerson.orElseThrow();
+
+			System.out.println(person);
+			System.out.println("Ingrese el lenguaje de programación:");
+			String programmingLanguage = scanner.next();
+			// Se modifica y se guarda
+			person.setProgrammingLanguage(programmingLanguage);
+			Person personDb = repository.save(person);
+
+			//Mostrar el objeto actualizado
+			System.out.println(personDb);
+		}	
+		else
+		{
+			System.out.println("El usuario no está presente! no existe!");
+		}
+		// });
+
+		scanner.close();
 	}
 
 
 	// Cuando son métodos crear, modificar, eliminar
+	// CREAR un registro
 	@Transactional
 	public void create()
 	{
