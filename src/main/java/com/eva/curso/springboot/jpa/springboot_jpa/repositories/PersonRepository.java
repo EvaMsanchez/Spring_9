@@ -18,4 +18,7 @@ public interface PersonRepository extends CrudRepository<Person, Long>
 
     // Cumple con la nomenclatura de nombre de método
     List<Person> findByProgrammingLanguageAndName(String programmingLanguage, String name);
+
+    @Query("select p.name, p.programmingLanguage from Person p")
+    List<Object[]> obtenerPersonData();
 }
