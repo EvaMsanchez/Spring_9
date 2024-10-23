@@ -32,6 +32,12 @@ public class Person
         this.programmingLanguage = programmingLanguage;
     }
 
+    // Constructor con solo 2 parámetros y en en repositorio se crea una instancia personalizada del objeto persona pero con estos dos parámetros
+    public Person(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
+    }
+
 
     public Long getId() {
         return id;

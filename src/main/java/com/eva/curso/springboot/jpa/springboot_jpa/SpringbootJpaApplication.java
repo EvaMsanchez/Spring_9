@@ -29,11 +29,30 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		personalizedQueries();	
+		personalizedQueries2();	
 	}
 
 
-	// Consulta personalizada, devuelve el nombre según el id y otras consultas más
+	// Más consultas personalizadas
+	@Transactional(readOnly = true)
+	public void personalizedQueries2()
+	{
+		System.out.println("=========================== consultas personalizadas  ===========================");
+	
+		System.out.println("========= mostrando el objeto persona y un campo =========");
+		List<Object[]> personRegs = repository.findAllMixPerson();
+		personRegs.forEach(reg -> {
+			System.out.println("programmingLanguage=" + reg[1] + ", person=" + reg[0]);
+		});
+
+		//Tener en cuenta que los demás campos del objeto de una INSTACIA PERSONALIZADA que no se han seleccionado, SI aparecen pero como "null"
+		System.out.println("========= mostrando el objeto de una instancia personalizada =========");
+		List<Person> persons = repository.findAllObjectPersonPersonalized();
+		persons.forEach(System.out::println);
+	}
+
+
+	// Consultas personalizadas
 	@Transactional(readOnly = true)
 	public void personalizedQueries()
 	{
