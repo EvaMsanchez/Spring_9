@@ -33,7 +33,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	}
 
 
-	// 
+	// Otra forma de ELIMINAR registros, se borra pasando el objeto
 	@Transactional
 	public void delete2()
 	{
@@ -44,14 +44,20 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		System.out.println("Ingrese el id a eliminar:");
 		Long id = scanner.nextLong();
 
-		repository.deleteById(id);
+		// Buscar el objeto persona por el id. Con el "Optional" se envuelve el objeto para preguntar si está presente o no
+		Optional<Person> optionalPerson = repository.findById(id);
+
+		// ifPresentOrElse: si está presente el objeto lo elimina, sino lo está lanza el mensaje
+		optionalPerson.ifPresentOrElse(person -> repository.delete(person), 
+			() -> System.out.println("Lo sentimos no existe la persona con ese id!"));
+
 		repository.findAll().forEach(System.out::println);
 
 		scanner.close();
 	}
 
 
-	// ELIMINAR registros
+	// ELIMINAR registros por id
 	@Transactional
 	public void delete()
 	{
@@ -84,17 +90,17 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		// optionalPerson.ifPresent(person -> {
 		if(optionalPerson.isPresent())
 		{
-			Person person = optionalPerson.orElseThrow();
+			Person personDB = optionalPerson.orElseThrow();
 
-			System.out.println(person);
+			System.out.println(personDB);
 			System.out.println("Ingrese el lenguaje de programación:");
 			String programmingLanguage = scanner.next();
 			// Se modifica y se guarda
-			person.setProgrammingLanguage(programmingLanguage);
-			Person personDb = repository.save(person);
+			personDB.setProgrammingLanguage(programmingLanguage);
+			Person personUpdated = repository.save(personDB);
 
 			//Mostrar el objeto actualizado
-			System.out.println(personDb);
+			System.out.println(personUpdated);
 		}	
 		else
 		{
