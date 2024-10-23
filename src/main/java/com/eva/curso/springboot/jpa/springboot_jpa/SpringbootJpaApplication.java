@@ -29,8 +29,40 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		delete2();	
+		personalizedQueries();	
 	}
+
+
+	// Consulta personalizada, devuelve el nombre según el id y otras consultas más
+	@Transactional(readOnly = true)
+	public void personalizedQueries()
+	{
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("=========================== consultas personalizadas ===========================");
+		System.out.println("Ingrese el id:");
+		Long id = scanner.nextLong();
+		scanner.close();
+
+		System.out.println("========= mostrando solo el nombre =========");
+		String name = repository.getNameById(id);
+		System.out.println(name);
+
+		System.out.println("========= mostrando solo el id =========");
+		Long idDB = repository.getIdById(id);
+		System.out.println(idDB);
+
+		System.out.println("========= mostrando nombre completo con concat =========");
+		String fullName = repository.getFullNameById(id);
+		System.out.println(fullName);
+
+		System.out.println("========= mostrando ciertos campos por el id (objeto) =========");
+		Object[] personReg = (Object[]) repository.obtenerPersonDataById(id);
+		System.out.println("id=" + personReg[0] + ", nombre=" + personReg[1] + ", apellido=" + personReg[2] + ", lenguaje=" + personReg[3]);
+
+		System.out.println("========= mostrando ciertos campos (lista) =========");
+		List<Object[]> regs = repository.obtenerPersonDataList();
+		regs.forEach(reg -> System.out.println("id=" + reg[0] + ", nombre=" + reg[1] + ", apellido=" + reg[2] + ", lenguaje=" + reg[3]));
+	}	
 
 
 	// Otra forma de ELIMINAR registros, se borra pasando el objeto
