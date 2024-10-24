@@ -11,6 +11,22 @@ import java.util.Optional;
 // Consulta JPQL
 public interface PersonRepository extends CrudRepository<Person, Long>
 {
+
+    @Query("select p.name from Person p")
+    List<String> findAllNames();
+
+    //Consulta que devuelve los nombres de personas sin repetir
+    @Query("select distinct(p.name) from Person p")
+    List<String> findAllNamesDistinct();
+
+    @Query("select distinct(p.programmingLanguage) from Person p")
+    List<String> findAllProgrammingLanguageDistinct();
+
+    //Consulta que devuelve los lenguajes de programación sin repetir y el número de esos lenguajes (contados)
+    @Query("select count(distinct(p.programmingLanguage)) from Person p")
+    Long findAllProgrammingLanguageDistinctCount();
+
+
     // Devuelve también una lista de personas pero a través de una clase DTO.
     // No es entity y por eso hay que indicar el package para que la encuentre, pero lo demás se realiza igual
     @Query("select new com.eva.curso.springboot.jpa.springboot_jpa.dto.PersonDto(p.name, p.lastname) from Person p")
