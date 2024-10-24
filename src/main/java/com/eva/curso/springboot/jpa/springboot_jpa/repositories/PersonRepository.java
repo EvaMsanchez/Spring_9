@@ -3,6 +3,7 @@ package com.eva.curso.springboot.jpa.springboot_jpa.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.eva.curso.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.eva.curso.springboot.jpa.springboot_jpa.entities.Person;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +11,13 @@ import java.util.Optional;
 // Consulta JPQL
 public interface PersonRepository extends CrudRepository<Person, Long>
 {
+    // Devuelve también una lista de personas pero a través de una clase DTO.
+    // No es entity y por eso hay que indicar el package para que la encuentre, pero lo demás se realiza igual
+    @Query("select new com.eva.curso.springboot.jpa.springboot_jpa.dto.PersonDto(p.name, p.lastname) from Person p")
+    List<PersonDto> findAllPersonDto();
+
     // Devuelve una lista de personas de una forma distinta, de una INSTANCIA PERSONALIZADA
-    // Importante: los demás campos de la instancia personalizada que no están en el constructo, SI aparecen pero como "null"
+    // Importante: los demás campos de la instancia personalizada que no están en el constructor, SI aparecen pero como "null"
     @Query("select new Person(p.name, p.lastname) from Person p")
     List<Person> findAllObjectPersonPersonalized();
 
@@ -59,7 +65,7 @@ public interface PersonRepository extends CrudRepository<Person, Long>
 
     // Buscar un solo objeto por id pero la consulta de forma personalizada
     // Optional: para envolver el objeto y saber si está presente o no
-    @Query(" select p from Person p where p.id=?1")
+    @Query("select p from Person p where p.id=?1")
     Optional<Person> findOne(Long id);
 
     // Buscar un solo objeto por name pero la consulta de forma personalizada

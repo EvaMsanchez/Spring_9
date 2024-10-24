@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eva.curso.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.eva.curso.springboot.jpa.springboot_jpa.entities.Person;
 import com.eva.curso.springboot.jpa.springboot_jpa.repositories.PersonRepository;
 
@@ -49,6 +50,11 @@ public class SpringbootJpaApplication implements CommandLineRunner
 		System.out.println("========= mostrando el objeto de una instancia personalizada =========");
 		List<Person> persons = repository.findAllObjectPersonPersonalized();
 		persons.forEach(System.out::println);
+
+		// A diferencia del anterior, al ser una clase DTO personalizada, solo aparecen poblados los campos de esa clase, NO campos "null"
+		System.out.println("========= mostrando el objeto DTO de una instancia personalizada =========");
+		List<PersonDto> personsDto = repository.findAllPersonDto();
+		personsDto.forEach(System.out::println);
 	}
 
 
