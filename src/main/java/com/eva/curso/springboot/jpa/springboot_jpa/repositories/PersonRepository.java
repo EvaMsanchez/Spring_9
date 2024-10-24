@@ -11,6 +11,22 @@ import java.util.Optional;
 // Consulta JPQL(query) y basa en nombre del método(nomenclatura Query Methods)
 public interface PersonRepository extends CrudRepository<Person, Long>
 {
+    // Consulta para obtener las personas que están en el rango de ids (un parámetro porque es un arreglo)
+    // where not in: para negar el rango
+    @Query("select p from Person p where p.id in ?1")
+    List<Person> getPersonsByIds(List<Long> ids);
+
+
+    // Subconsultas (consultas anidadas)
+    // Devuelve el nombre y la longitud de un registro, cuando la longitud del nombre coincida con el mínimo
+    @Query("select p.name, length(p.name) from Person p where length(p.name)= (select min(length(p.name)) from Person p)")
+    List<Object[]> getShorterName();
+
+    // Devuelve la persona con el id máximo
+    @Query("select p from Person p where p.id= (select max(p.id) from Person p)")
+    Optional<Person> getLastRegistration();
+
+
     // Resumen funciones agregración
     @Query("select min(p.id), max(p.id), sum(p.id), avg(length(p.name)), count(p.id) from Person p")
     Object getResumeAggregationFunction();

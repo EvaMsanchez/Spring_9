@@ -1,5 +1,6 @@
 package com.eva.curso.springboot.jpa.springboot_jpa;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -30,7 +31,36 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		queriesFunctionAggregation();	
+		whereIn();	
+	}
+
+
+	// WHERE IN: para indicar un rango del mismo campo o atributo (como el where pero para rangos)
+	// WHERE NOT IN: para lo contrario, negar el rango
+	@Transactional(readOnly = true)
+	public void whereIn()
+	{
+		System.out.println("========= consulta where in =========");
+		List<Person> persons = repository.getPersonsByIds(Arrays.asList(1L, 2L, 5L, 7L));
+		persons.forEach(System.out::println);		
+	}
+
+
+	// Subconsultas
+	@Transactional(readOnly = true)
+	public void subQueries()
+	{
+		System.out.println("========= consulta por el nombre más corto y su longitud(subconsulta) =========");
+		List<Object[]> registers = repository.getShorterName();
+		registers.forEach(reg -> {
+			String name = (String) reg[0];
+			Integer length = (Integer) reg[1];
+			System.out.println("name=" + name + " lenght=" + length);
+		});
+
+		System.out.println("========= consulta para obtener el último registro de persona(subconsulta) =========");
+		Optional<Person> optionalPerson = repository.getLastRegistration();
+		optionalPerson.ifPresent(System.out::println);
 	}
 
 
