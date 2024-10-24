@@ -30,7 +30,53 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		personalizedQueriesBetween();	
+		queriesFunctionAggregation();	
+	}
+
+
+	// MIN Y MAX: valor mínimo y máximo
+	// LENGTH: longitud
+	// SUM: sumar
+	// AVG: promedio (media)
+	@Transactional(readOnly = true)
+	public void queriesFunctionAggregation()
+	{
+		System.out.println("========= consulta con el total de registros de la tabla persona(count) =========");
+		Long count = repository.getTotalPerson();
+		System.out.println(count);
+
+		System.out.println("========= consulta con el valor mínimo del id(min) =========");
+		Long min = repository.getMinId();
+		System.out.println(min);
+
+		System.out.println("========= consulta con el valor máximo del id(max) =========");
+		Long max = repository.getMaxId();
+		System.out.println(max);
+
+		System.out.println("========= consulta con el nombre y su longitud(length) =========");
+		List<Object[]> regs = repository.getPersonNameLength();
+		regs.forEach(reg -> {
+			String name = (String) reg[0];
+			Integer length = (Integer) reg[1];
+			System.out.println("name=" + name + " lenght=" + length);
+		});
+
+		System.out.println("========= consulta con el nombre más corto(length y min) =========");
+		Integer minLengthName = repository.getMinLengthName();
+		System.out.println(minLengthName);
+
+		System.out.println("========= consulta con el nombre más largo(length y max) =========");
+		Integer maxLengthName = repository.getMaxLengthName();
+		System.out.println(maxLengthName);
+
+		System.out.println("========= consultas resumen de funciones de agregación min, max, sum, avg, count =========");
+		Object[] resumeReg = (Object[]) repository.getResumeAggregationFunction();
+		System.out.println(
+			"min=" + resumeReg[0] +
+		 	", max=" + resumeReg[1] +
+			", sum=" + resumeReg[2] + 
+			", avg=" + resumeReg[3] + 
+			", count=" + resumeReg[4]);
 	}
 
 
@@ -48,7 +94,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	}
 
 
-	// CONCAT, UPPER, LOWER: concatenar, mayúscula, minúscula
+	// CONCAT, UPPER, LOWER: concatenar, mayúscula y minúscula
 	@Transactional(readOnly = true)
 	public void personalizedQueriesConcatUpperAndLowerCase()
 	{

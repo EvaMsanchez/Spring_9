@@ -11,6 +11,36 @@ import java.util.Optional;
 // Consulta JPQL(query) y basa en nombre del método(nomenclatura Query Methods)
 public interface PersonRepository extends CrudRepository<Person, Long>
 {
+    // Resumen funciones agregración
+    @Query("select min(p.id), max(p.id), sum(p.id), avg(length(p.name)), count(p.id) from Person p")
+    Object getResumeAggregationFunction();
+
+
+    // Consulta que obtiene el nombre de las personas y la longitud
+    @Query("select p.name, length(p.name) from Person p")
+    List<Object[]> getPersonNameLength();
+
+    // Misma consulta, pero ahora obteniendo solo el nombre más corto
+    @Query("select min(length(p.name)) from Person p")
+    Integer getMinLengthName();
+
+    // Misma consulta, pero ahora obteniendo solo el nombre más largo
+    @Query("select max(length(p.name)) from Person p")
+    Integer getMaxLengthName();
+
+    // Consulta que devuelve contado los objetos que hay
+    @Query("select count(p) from Person p")
+    Long getTotalPerson();
+    
+    // Devuelve el id mínimo
+    @Query("select min(p.id) from Person p")
+    Long getMinId();
+
+    // Devuelve el id máximo
+    @Query("select max(p.id) from Person p")
+    Long getMaxId();
+
+
     // Consulta que devuelve las personas que su id esté entre el 2 y el 5 inclusive, y ORDENADAS
     @Query("select p from Person p where p.id between ?1 and ?2 order by p.name desc") // ordenar descendente (desc)
     List<Person> findAllBetweenId(Long id1, Long id2);
