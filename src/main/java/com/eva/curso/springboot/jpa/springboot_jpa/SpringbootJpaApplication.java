@@ -30,7 +30,39 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		personalizedQueriesDistinct();	
+		personalizedQueriesBetween();	
+	}
+
+
+	// BETWEEN: entre una cantidad y otra, inclusive, si es número, inclusive solo la primera si es carácter
+	// ORDER BY: para ordenar, por defecto de forma ascendente, descendente hay que indicarlo (desc)
+	@Transactional(readOnly = true)
+	public void personalizedQueriesBetween()
+	{
+		System.out.println("========= consulta por rangos(between) y ordenadas(order by) =========");
+		List<Person> persons = repository.findByIdBetweenOrderByNameDesc(2L, 5L);
+		persons.forEach(System.out::println);
+
+		persons = repository.findByNameBetweenOrderByNameDescLastnameDesc("J", "Q");
+		persons.forEach(System.out::println);
+	}
+
+
+	// CONCAT, UPPER, LOWER: concatenar, mayúscula, minúscula
+	@Transactional(readOnly = true)
+	public void personalizedQueriesConcatUpperAndLowerCase()
+	{
+		System.out.println("========= consulta nombres y apellidos(concat) =========");
+		List<String> names = repository.findAllFullNameConcat();
+		names.forEach(System.out::println);
+
+		System.out.println("========= consulta nombres y apellidos mayúscula(upper) =========");
+		names = repository.findAllFullNameConcatUpper();
+		names.forEach(System.out::println);
+
+		System.out.println("========= consulta nombres y apellidos minúscula(lower) =========");
+		names = repository.findAllFullNameConcatLower();
+		names.forEach(System.out::println);
 	}
 
 

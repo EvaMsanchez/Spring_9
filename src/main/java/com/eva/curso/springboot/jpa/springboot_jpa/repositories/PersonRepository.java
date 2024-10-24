@@ -8,9 +8,39 @@ import com.eva.curso.springboot.jpa.springboot_jpa.entities.Person;
 import java.util.List;
 import java.util.Optional;
 
-// Consulta JPQL
+// Consulta JPQL(query) y basa en nombre del método(nomenclatura Query Methods)
 public interface PersonRepository extends CrudRepository<Person, Long>
 {
+    // Consulta que devuelve las personas que su id esté entre el 2 y el 5 inclusive, y ORDENADAS
+    @Query("select p from Person p where p.id between ?1 and ?2 order by p.name desc") // ordenar descendente (desc)
+    List<Person> findAllBetweenId(Long id1, Long id2);
+
+    // Consulta que devuelve las personas que su nombre esté entre la J y P del abeceracio (nombres que empiezas por esas letras) y ORDENADAS
+    // A diferencia de cantidades, cuando son carácteres, inclusive el primero pero no el último (se excluye)
+    @Query("select p from Person p where p.name between ?1 and ?2 order by p.name, p.lastname asc") 
+    List<Person> findAllBetweenName(String c1, String c2);
+
+    // Mismas consultas con el between, pero basada en el nombre del método (Query Methods SIN @Query)
+    List<Person> findByIdBetween(Long id1, Long id2);
+    List<Person> findByNameBetween(String c1, String c2);
+    // Ahora incluyendo el order by (para ordenar sin between se lo quitamos)
+    List<Person> findByIdBetweenOrderByNameDesc(Long id1, Long id2); // ordenando de forma descendente por nombre
+    List<Person> findByNameBetweenOrderByNameAsc(String c1, String c2);
+    List<Person> findByNameBetweenOrderByNameDescLastnameDesc(String c1, String c2); // ordenando por DOS CAMPOS
+
+
+    // Mostrar en mayúscula, se puede aplicar individualmente por cada campo
+    @Query("select upper(p.name || ' ' || p.lastname) from Person p")
+    List<String> findAllFullNameConcatUpper();
+
+    // Mostrar en minúscula
+    @Query("select lower(concat(p.name, ' ', p.lastname)) from Person p")
+    List<String> findAllFullNameConcatLower();
+
+    // Otra forma de concatenar
+    //@Query("select concat(p.name, ' ', p.lastname) from Person p")
+    @Query("select p.name || ' ' || p.lastname from Person p")
+    List<String> findAllFullNameConcat();
 
     @Query("select p.name from Person p")
     List<String> findAllNames();
@@ -95,5 +125,4 @@ public interface PersonRepository extends CrudRepository<Person, Long>
     // Buscar por coincidencia en el nombre, pero SIN @Query con el query methods "Containing"
     Optional<Person> findByNameContaining(String name);
 
-    
 }
