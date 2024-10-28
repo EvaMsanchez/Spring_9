@@ -1,6 +1,7 @@
 package com.eva.curso.springboot.jpa.springboot_jpa.entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,10 @@ public class Person
 
     @Column(name="programming_language")
     private String programmingLanguage;
+
+    // Atributo de la clase eventos del ciclo de vida
+    @Embedded
+    private Audit audit = new Audit();
 
     // Obligatorio, ya que Hibernate utiliza el constructor vacío para poblar tabla
     public Person() {}
@@ -68,7 +73,7 @@ public class Person
     @Override
     public String toString() {
         return "[id=" + id + ", name=" + name + ", lastname=" + lastname + ", programmingLanguage="
-                + programmingLanguage + "]";
+                + programmingLanguage + ", createAt=" + audit.getCreatAt() + ", updated=" + audit.getUpdatedAt() + "]";
     }
     
 }

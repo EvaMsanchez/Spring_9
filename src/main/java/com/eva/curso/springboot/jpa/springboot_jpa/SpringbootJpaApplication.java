@@ -31,7 +31,7 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception 
 	{
-		whereIn();	
+		update();	
 	}
 
 
@@ -304,11 +304,22 @@ public class SpringbootJpaApplication implements CommandLineRunner
 	@Transactional
 	public void create()
 	{
-		Person person = new Person(null, "Lalo", "Thor", "Phyton");
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el nombre:");
+		String name = scanner.next();
+		System.out.println("Ingrese el apellido");
+		String lastname = scanner.next();
+		System.out.println("Ingrese el lenguaje de programación:");
+		String programmingLanguage = scanner.next();
+		scanner.close();
+
+		Person person = new Person(null, name, lastname, programmingLanguage);
 
 		// Guardamos un nuevo registro y devuelve el objeto que se guardó
 		Person personNew = repository.save(person);
 		System.out.println(personNew);
+
+		repository.findById(personNew.getId()).ifPresent(System.out::println);
 	}
 
 
